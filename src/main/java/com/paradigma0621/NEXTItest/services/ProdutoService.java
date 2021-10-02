@@ -35,6 +35,12 @@ public class ProdutoService {/*
 								 */
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Produto não encontrado! Id: " + id + ", Tipo: " + Produto.class.getName()));
-		
 	}
+
+	public Produto insert(Produto obj) {
+		obj.setId(null); //Para garantir que estará salvando um objeto novo...
+		return repo.save(obj); //... pois se ele tiver algo o método 'save' vai considerar que é uma atualização, e não uma inserção
+					
+	}
+	
 }
