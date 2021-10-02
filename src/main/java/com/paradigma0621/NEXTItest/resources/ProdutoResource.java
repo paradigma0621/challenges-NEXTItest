@@ -53,7 +53,13 @@ public class ProdutoResource {
 
 		obj.setId(id);  //Por precaução de que o update vai acontecer o objeto com esse 'id' que foi passado como parâmetro do método
 		obj = service.update(obj);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.noContent().build(); //Retorno de resposta HTTP ok
+	}
+
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) { //'Void': pois quando apagar vai retornar uma resposta com corpo vazio. O @PathVariable é para o Spring saber que esse id informado nessa linha é o "id" da linha de cima
+		service.delete(id);
+		return ResponseEntity.noContent().build();  //Retorno de resposta HTTP ok
 	}
 	
 }

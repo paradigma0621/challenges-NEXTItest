@@ -3,6 +3,7 @@ package com.paradigma0621.NEXTItest.services; //Camada de serviços
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.paradigma0621.NEXTItest.domain.Produto;
@@ -45,5 +46,11 @@ public class ProdutoService {/*
 	public Produto update(Produto obj) { //Não setou com 'obj.setId(null)'. O obj já vem com 'id' e será esse que será atualizado
 		find(obj.getId()); //Antes de atualizar verifica se o objeto existe. Se não existir é lançada a exceção ObjectNotFoundException  
 		return repo.save(obj);
+	}
+	
+	
+	public void delete(Integer id) {
+		find(id); //Antes de atualizar verifica se o objeto existe. Se não existir é lançada a exceção ObjectNotFoundException
+		repo.deleteById(id);
 	}
 }
