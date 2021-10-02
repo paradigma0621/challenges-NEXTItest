@@ -22,12 +22,10 @@ public class ProdutoResource {
 	private ProdutoService service; // O controlador REST vai acessar o serviço
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET) // Para dizer que o endpoint agora é: /produtos/{id}
-	public ResponseEntity<?> find(@PathVariable Integer id) { // Para o Spring saber que esse id informado nessa linha é
+	public ResponseEntity<Produto> find(@PathVariable Integer id) { // Para o Spring saber que esse id informado nessa linha é
 																// o "id" da linha de cima colocamos o @PathVariable
 		// Esse 'ReponseEntity' é um tipo especial do Spring que encapsula e armazena
-		// várias informações de uma resposta http para um serviço REST. Foi colocado
-		// esse "?" porque poderá ser de qualquer tipo, pois pode tanto encontrar como
-		// não encontrar um 'Produto' com o 'id' especificado
+		// várias informações de uma resposta http para um serviço REST.
 
 		Produto obj = service.find(id);
 		return ResponseEntity.ok().body(obj); // ok() para dizer que a operação ocorreu com sucesso,
@@ -45,6 +43,17 @@ public class ProdutoResource {
 			.toUri(); // Por fim converte para URI
 		return ResponseEntity.created(uri).build(); //método 'created' gera código de HTTP 201
 													//o 'build' gera a resposta
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT) 
+	public ResponseEntity<Void> update(@RequestBody Produto obj, @PathVariable Integer id) { //para que o
+		//objeto Produto seja construido a partir dos dados json que enviar, temos que inserir a 
+		//notação '@RequestBody' - faz o json ser convertido para o objeto Java automaticamente. 
+		//O @PathVariable é para o Spring saber que esse id informado nessa linha é o "id" da linha de cima
+
+		obj.setId(id);  //Por precaução de que o update vai acontecer o objeto com esse 'id' que foi passado como parâmetro do método
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 	
 }

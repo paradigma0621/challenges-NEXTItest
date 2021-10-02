@@ -38,9 +38,12 @@ public class ProdutoService {/*
 	}
 
 	public Produto insert(Produto obj) {
-		obj.setId(null); //Para garantir que estará salvando um objeto novo...
-		return repo.save(obj); //... pois se ele tiver algo o método 'save' vai considerar que é uma atualização, e não uma inserção
-					
+		obj.setId(null); //Para garantir que estará salvando um objeto novo, pois se ele tiver algu, setId(#NumId) o método 'save' vai considerar que é uma atualização, e não uma inserção (ver update() logo abaixo)
+		return repo.save(obj); 
 	}
-	
+
+	public Produto update(Produto obj) { //Não setou com 'obj.setId(null)'. O obj já vem com 'id' e será esse que será atualizado
+		find(obj.getId()); //Antes de atualizar verifica se o objeto existe. Se não existir é lançada a exceção ObjectNotFoundException  
+		return repo.save(obj);
+	}
 }
