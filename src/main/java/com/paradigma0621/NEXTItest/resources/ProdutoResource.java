@@ -1,6 +1,7 @@
 package com.paradigma0621.NEXTItest.resources; //Pacote de controladores REST
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +61,12 @@ public class ProdutoResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) { //'Void': pois quando apagar vai retornar uma resposta com corpo vazio. O @PathVariable é para o Spring saber que esse id informado nessa linha é o "id" da linha de cima
 		service.delete(id);
 		return ResponseEntity.noContent().build();  //Retorno de resposta HTTP ok
+	}
+
+	@RequestMapping(method=RequestMethod.GET) //endpoint = "http://localhost:8080/produtos")  (Busque todos produtos)
+	public ResponseEntity<List<Produto>> findAll() {
+		List<Produto> list = service.findAll();
+		return ResponseEntity.ok().body(list);
 	}
 	
 }

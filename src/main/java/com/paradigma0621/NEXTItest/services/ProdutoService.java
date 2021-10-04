@@ -1,9 +1,9 @@
 package com.paradigma0621.NEXTItest.services; //Camada de serviços
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.paradigma0621.NEXTItest.domain.Produto;
@@ -42,15 +42,24 @@ public class ProdutoService {/*
 		obj.setId(null); //Para garantir que estará salvando um objeto novo, pois se ele tiver algu, setId(#NumId) o método 'save' vai considerar que é uma atualização, e não uma inserção (ver update() logo abaixo)
 		return repo.save(obj); 
 	}
-
-	public Produto update(Produto obj) { //Não setou com 'obj.setId(null)'. O obj já vem com 'id' e será esse que será atualizado
-		find(obj.getId()); //Antes de atualizar verifica se o objeto existe. Se não existir é lançada a exceção ObjectNotFoundException  
-		return repo.save(obj);
+	
+	public Produto update(Produto obj) {
+		Produto newObj = find(obj.getId()); //Instância objeto a partir do banco de dados - ele estará monitorado pelo JPA
+		updateData(newObj, obj); // Atualiza o objeto com os dados que foram enviados na requisição
+		return repo.save(newObj); // Salva objeto no banco de dados
+	}
+	
+	private void updateData(Produto newObj, Produto obj) {
+		newObj.setNome(obj.getNome());
 	}
 	
 	
 	public void delete(Integer id) {
 		find(id); //Antes de atualizar verifica se o objeto existe. Se não existir é lançada a exceção ObjectNotFoundException
 		repo.deleteById(id);
+	}
+		
+	public List<Produto> findAll() {
+		return repo.findAll();
 	}
 }
