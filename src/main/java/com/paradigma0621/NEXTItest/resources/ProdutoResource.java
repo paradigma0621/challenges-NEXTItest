@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.paradigma0621.NEXTItest.domain.Cliente;
 import com.paradigma0621.NEXTItest.domain.Produto;
 import com.paradigma0621.NEXTItest.services.ProdutoService;
 

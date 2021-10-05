@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paradigma0621.NEXTItest.domain.Cliente;
-import com.paradigma0621.NEXTItest.domain.Produto;
 import com.paradigma0621.NEXTItest.repositories.ClienteRepository;
 import com.paradigma0621.NEXTItest.services.exceptions.ObjectNotFoundException;
 

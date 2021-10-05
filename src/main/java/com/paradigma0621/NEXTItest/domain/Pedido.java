@@ -2,7 +2,6 @@ package com.paradigma0621.NEXTItest.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 @Entity // Indica que essa classe será uma entidade do JPA
 		// Criará no banco de dados uma tabela Pedido com todos os campos

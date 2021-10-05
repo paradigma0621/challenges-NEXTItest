@@ -1,7 +1,6 @@
 package com.paradigma0621.NEXTItest.resources; //Pacote de controladores REST
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

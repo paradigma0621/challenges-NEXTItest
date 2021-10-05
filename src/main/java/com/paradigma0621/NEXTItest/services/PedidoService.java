@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paradigma0621.NEXTItest.domain.Pedido;
-import com.paradigma0621.NEXTItest.domain.Produto;
 import com.paradigma0621.NEXTItest.repositories.PedidoRepository;
 import com.paradigma0621.NEXTItest.repositories.ProdutoRepository;
 import com.paradigma0621.NEXTItest.services.exceptions.ObjectNotFoundException;
@@ -41,6 +40,16 @@ public class PedidoService {/*
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Pedido não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
 	}
+	
+
+	public Pedido insert(Pedido obj) {
+		obj.setId(null); // Para garantir que estará salvando um objeto novo, pois se ele tiver algum,
+							// setId(#NumId) o método 'save' vai considerar que é uma atualização, e não uma
+							// inserção (ver update() logo abaixo)
+		obj = repo.save(obj);
+		return obj;
+	}
+
 
 	public Pedido update(Pedido obj) {
 		Pedido newObj = find(obj.getId()); // Instância objeto a partir do banco de dados -
