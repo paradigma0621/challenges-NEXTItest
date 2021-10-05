@@ -23,8 +23,9 @@ public class ClienteResource {
 	private ClienteService service; // O controlador REST vai acessar o serviço
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET) // Para dizer que o endpoint agora é: /clientes/{id}
-	public ResponseEntity<Cliente> find(@PathVariable Integer id) { // Para o Spring saber que esse id informado nessa linha é
-																// o "id" da linha de cima colocamos o @PathVariable
+	public ResponseEntity<Cliente> find(@PathVariable Integer id) { // Para o Spring saber que esse id informado nessa
+																	// linha é
+		// o "id" da linha de cima colocamos o @PathVariable
 		// Esse 'ReponseEntity' é um tipo especial do Spring que encapsula e armazena
 		// várias informações de uma resposta http para um serviço REST.
 
@@ -32,41 +33,54 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(obj); // ok() para dizer que a operação ocorreu com sucesso,
 		// e a resposta terá como corpo o objeto 'obj'
 	}
-	
-	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Cliente obj) { //para que o objeto Cliente seja construido a partir dos dados json que enviar, temos que inserir a notação '@RequestBody' - faz o json ser convertido para o objeto Java automaticamente
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody Cliente obj) { // para que o objeto Cliente seja construido a partir
+																	// dos dados json que enviar, temos que inserir a
+																	// notação '@RequestBody' - faz o json ser
+																	// convertido para o objeto Java automaticamente
 		obj = service.insert(obj);
-		
-		// Quando inserir com sucesso: é retornado o código HTTP 201, juntamente com a URI do novo objeto inserido
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest() //Pega URI do novo recurso inserido = http://localhost:8080/clientes/
-			.path("/{id}") //mais o 'id' do objeto que nós criamos
-			.buildAndExpand(obj.getId()) //para atribuir o valor do Id na linha de cima (pega o Id do objeto que acabou de inserir).
-			.toUri(); // Por fim converte para URI
-		return ResponseEntity.created(uri).build(); //método 'created' gera código de HTTP 201
-													//o 'build' gera a resposta
-	}
-	
-	@RequestMapping(value="/{id}", method=RequestMethod.PUT) 
-	public ResponseEntity<Void> update(@RequestBody Cliente obj, @PathVariable Integer id) { //para que o
-		//objeto Cliente seja construido a partir dos dados json que enviar, temos que inserir a 
-		//notação '@RequestBody' - faz o json ser convertido para o objeto Java automaticamente. 
-		//O @PathVariable é para o Spring saber que esse id informado nessa linha é o "id" da linha de cima
 
-		obj.setId(id);  //Por precaução de que o update vai acontecer o objeto com esse 'id' que foi passado como parâmetro do método
+		// Quando inserir com sucesso: é retornado o código HTTP 201, juntamente com a
+		// URI do novo objeto inserido
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest() // Pega URI do novo recurso inserido =
+																	// http://localhost:8080/clientes/
+				.path("/{id}") // mais o 'id' do objeto que nós criamos
+				.buildAndExpand(obj.getId()) // para atribuir o valor do Id na linha de cima (pega o Id do objeto que
+												// acabou de inserir).
+				.toUri(); // Por fim converte para URI
+		return ResponseEntity.created(uri).build(); // método 'created' gera código de HTTP 201
+													// o 'build' gera a resposta
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Cliente obj, @PathVariable Integer id) { // para que o
+		// objeto Cliente seja construido a partir dos dados json que enviar, temos que
+		// inserir a notação '@RequestBody' - faz o json ser convertido para o objeto Java
+		// automaticamente.
+		// O @PathVariable é para o Spring saber que esse id informado nessa linha é o
+		// "id" da linha de cima
+
+		obj.setId(id); // Por precaução de que o update vai acontecer o objeto com esse 'id' que foi
+						// passado como parâmetro do método
 		obj = service.update(obj);
-		return ResponseEntity.noContent().build(); //Retorno de resposta HTTP ok
+		return ResponseEntity.noContent().build(); // Retorno de resposta HTTP ok
 	}
 
-	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-	public ResponseEntity<Void> delete(@PathVariable Integer id) { //'Void': pois quando apagar vai retornar uma resposta com corpo vazio. O @PathVariable é para o Spring saber que esse id informado nessa linha é o "id" da linha de cima
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) { 
+	// 'Void': pois quando apagar vai retornar uma resposta com corpo vazio. O @PathVariable é para
+	// o Spring saber que esse id informado nessa linha é o "id" da linha de cima
 		service.delete(id);
-		return ResponseEntity.noContent().build();  //Retorno de resposta HTTP ok
+		return ResponseEntity.noContent().build(); // Retorno de resposta HTTP ok
 	}
 
-	@RequestMapping(method=RequestMethod.GET) //endpoint = "http://localhost:8080/clientes")  (Busque todos Clientes)
+	@RequestMapping(method = RequestMethod.GET) // endpoint = "http://localhost:8080/clientes")
+												// (Busque todos Clientes)
 	public ResponseEntity<List<Cliente>> findAll() {
 		List<Cliente> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+		return ResponseEntity.ok().body(list);// ok() para dizer que a operação ocorreu com sucesso,
+		// e a resposta terá como corpo a 'list'
 	}
-	
+
 }

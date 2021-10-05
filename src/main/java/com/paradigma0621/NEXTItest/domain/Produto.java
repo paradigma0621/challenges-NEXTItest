@@ -1,11 +1,18 @@
 package com.paradigma0621.NEXTItest.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity // Indica que essa classe será uma entidade do JPA
@@ -23,7 +30,10 @@ public class Produto implements Serializable {
 	private Double preco;
 	private Integer quantidade;
 	
-
+	@JsonIgnore
+	@ManyToOne
+	private Pedido pedido;
+	
 	public Produto() {
 	}
 
@@ -74,6 +84,15 @@ public class Produto implements Serializable {
 
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
+	}
+
+
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
 	@Override

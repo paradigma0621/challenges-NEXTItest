@@ -80,9 +80,6 @@ class NextItestApplicationTests {
         Remover cliente de um pedido.
         Vincular produto(s) a um pedido.
         Remover produto(s) de um pedido.
-
-
-	*/
-
+	  */
 }
 

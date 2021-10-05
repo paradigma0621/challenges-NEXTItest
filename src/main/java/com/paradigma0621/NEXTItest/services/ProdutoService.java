@@ -39,7 +39,7 @@ public class ProdutoService {/*
 	}
 
 	public Produto insert(Produto obj) {
-		obj.setId(null); //Para garantir que estará salvando um objeto novo, pois se ele tiver algu, setId(#NumId) o método 'save' vai considerar que é uma atualização, e não uma inserção (ver update() logo abaixo)
+		obj.setId(null); //Para garantir que estará salvando um objeto novo, pois se ele tiver algum, setId(#NumId) o método 'save' vai considerar que é uma atualização, e não uma inserção (ver update() logo abaixo)
 		return repo.save(obj); 
 	}
 	
@@ -54,6 +54,8 @@ public class ProdutoService {/*
 		newObj.setDescricao(obj.getDescricao());
 		newObj.setPreco(obj.getPreco());
 		newObj.setQuantidade(obj.getQuantidade());
+		///newObj.setPedido(obj.getPedido());   ---->> Pode ser que o item ainda não esteja
+											//vinculado a um pedido, tem que deixar essa opção
 	}
 	
 	
