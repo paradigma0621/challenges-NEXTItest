@@ -49,7 +49,7 @@ public class ProdutoService {/*
 		return repo.save(newObj); // Salva objeto no banco de dados
 	}
 	
-	private void updateData(Produto newObj, Produto obj) {
+	public void updateData(Produto newObj, Produto obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setDescricao(obj.getDescricao());
 		newObj.setPreco(obj.getPreco());

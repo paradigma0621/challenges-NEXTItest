@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.paradigma0621.NEXTItest.domain.Pedido;
 import com.paradigma0621.NEXTItest.repositories.PedidoRepository;
-import com.paradigma0621.NEXTItest.repositories.ProdutoRepository;
 import com.paradigma0621.NEXTItest.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -27,8 +26,6 @@ public class PedidoService {/*
 	private PedidoRepository repo; // objeto capaz de realizar operações de
 									// acesso a dados (buscar, salvar, alterar,
 									// deletar) referente ao tipo 'Pedido'
-	@Autowired
-	private ProdutoRepository repoProdutos;
 
 	public Pedido find(Integer id) { // Operação capaz de buscar 'Pedido' por
 										// código (retornando obj do tipo 'Pedido')
@@ -58,7 +55,7 @@ public class PedidoService {/*
 		return repo.save(newObj); // Salva objeto no banco de dados
 	}
 
-	private void updateData(Pedido newObj, Pedido obj) {
+	public void updateData(Pedido newObj, Pedido obj) {
 		newObj.setCliente(obj.getCliente());
 		newObj.setTotalDaCompra(obj.getTotalDaCompra());
 		newObj.setProdutos(obj.getProdutos());
@@ -67,7 +64,7 @@ public class PedidoService {/*
 
 	public void delete(Integer id) {
 		find(id); // Antes de atualizar verifica se o objeto existe. Se não existir é lançada a
-					// exceção ObjectNotFoundException
+				  // exceção ObjectNotFoundException
 		repo.deleteById(id);
 	}
 

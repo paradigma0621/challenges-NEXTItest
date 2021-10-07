@@ -36,42 +36,43 @@ public class NextItestApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		//---------------- Base de dados amostral gera na inicialização ------------------------
+		//---------------- Base de dados amostral gerada na inicialização ------------------------
 		
 		//Produtos
-		
 		Produto p1 = new Produto(null, "Computador", "Notebook Samsung Galaxy Book S - Intel®Core™ i5 -8GB - 256GB SSD -Tela 13.3\" Full HD -Touch",	6479.10d, 3);
 		Produto p2 = new Produto(null, "Impressora", "Impressora multifuncional HP DeskJet Ink Advantage 2774", 449.11d, 2);
 		Produto p3 = new Produto(null, "Mouse", "Mouse com fio USB Logitech M90 - Cinza", 34.90d, 4);
 		Produto p4 = new Produto(null, "Teclado", "Teclado com fio USB Logitech K120 Resistente à Respingos e Layout ABNT2", 59.99d, 1);
 		Produto p5 = new Produto(null, "Luminária", "Luminária Articulada De Mesa Abajur Tipo Pixar", 121.00d, 1);
 
-		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-		
 		//-----------------------------------------------------------------------
 		//Clientes
-		
-	    Date dataFormatada1 = new Date();
-	    //Date dataFormatada2 = formato.parse("08/02/1960");
-	    //Date dataFormatada3 = formato.parse("12/03/1974");
+		SimpleDateFormat formatoAniversario = new SimpleDateFormat("dd-MM-yyyy");
+	    Date dataFormatada1 = formatoAniversario.parse("08-02-1960");
+	    Date dataFormatada2 = formatoAniversario.parse("13-03-1974");
+	    Date dataFormatada3 = formatoAniversario.parse("22-07-1981");
 		
 		Cliente c1 = new Cliente(null, "Fábio Santos", "040.630.489-20", dataFormatada1);
-		Cliente c3 = new Cliente(null, "Rose Soares Silveira", "277.529.179-15", dataFormatada1);
-		Cliente c2 = new Cliente(null, "João Pedro de Souza", "010.238.187-10", dataFormatada1);
+		Cliente c3 = new Cliente(null, "Rose Soares Silveira", "277.529.179-15", dataFormatada2);
+		Cliente c2 = new Cliente(null, "João Pedro de Souza", "010.238.187-10", dataFormatada3);
 		clienteRepository.saveAll(Arrays.asList(c1, c2,c3));
 		
 		
 
 		//-----------------------------------------------------------------------
 		//Pedidos
-		//SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
-	    Date dataCompra1 = formato.parse("23/01/2001");
-	    Date dataCompra2 = formato.parse("13/04/2007");
-	    Date dataCompra3 = formato.parse("28/09/2019");
-	    Date dataCompra4 = formato.parse("30/11/2020");
+		SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				
+	    Date dataCompra1 = formato.parse("23-01-2001 16:15:14");
+	   // Date dataCompra2 = formato.parse("13-04-2007 08:52:54");
+	    Date dataCompra3 = formato.parse("28-09-2019 22:10:00");
+	   // Date dataCompra4 = formato.parse("30-11-2020 01:32:28");
+	    	    
+	    Pedido pedido1 = new Pedido(null, c1, dataCompra3); // Especificamos null para o 'id' pois
+	    													// o próprio banco de dados vai se
+	    													// encarregar de atribuí-lo
 	    
-	    Pedido pedido1 = new Pedido(null, c1, 31.23, dataCompra3);
-	    Pedido pedido2 = new Pedido(null, c2, 129.16, dataCompra2);
+	    Pedido pedido2 = new Pedido(null, c2, dataCompra1);
 
 	    c2.getPedidos().addAll(Arrays.asList(pedido2));
 	    p3.setPedido(pedido2);

@@ -15,4 +15,6 @@ negócio.
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 // Tipo especial do Spring capaz de acessar os dados com base no tipo passado (objetos do tipo 'Produto')
 // Integer é o tipo do atributo identificador do objeto (que nesse caso é 'Id', dentro da classe Produto.java
+
+	  
 }

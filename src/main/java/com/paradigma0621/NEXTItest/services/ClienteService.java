@@ -53,7 +53,7 @@ public class ClienteService {/*
 		return repo.save(newObj); // Salva objeto no banco de dados
 	}
 	
-	private void updateData(Cliente newObj, Cliente obj) {
+	public void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setCpf(obj.getCpf());
 		newObj.setDataNascimento(obj.getDataNascimento());

@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity // Indica que essa classe será uma entidade do JPA
 		// Criará no banco de dados uma tabela Pedido com todos os campos
 		// dessa classe de forma automática
@@ -29,10 +31,13 @@ public class Pedido implements Serializable {
 	
 	private double totalDaCompra;
 	
-	//@JsonFormat(pattern="dd/MM/yyyy HH:mm")
+	@JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
 	private Date dataCompra;
 	
-	  
+	  // Caso deseje-se deletar um 'pedido' sem deletar conjuntamente os produtos do mesmo da lista 
+	  // de produtos, deve-se alterar a linha abaixo para:
+	  // @OneToMany(mappedBy = "pedido") // nesse caso é preciso remover todos os produtos da
+	  // de dentro do pedido antes de se conseguir excluir o pedido
 	  @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL) // note que nesta anotação 
 	  //definimos a propriedade mappedBy como “pedido” que é para informar que o atributo com
 	  //o nome pedido na entity Produto que é dona do relacionamento.
@@ -42,11 +47,12 @@ public class Pedido implements Serializable {
 	public Pedido() {
 	}
 
-	public Pedido(Integer id, Cliente cliente, double totalDaCompra, Date dataCompra) {
+	public Pedido(Integer id, Cliente cliente, Date dataCompra) {
 		super();
 		this.id = id;
 		this.cliente = cliente;
-		this.totalDaCompra = totalDaCompra;
+		this.totalDaCompra = 0; // Começa sem nenhum produto adicionado, portanto preço 
+								// total inicial é = R$ 0.00 
 		this.dataCompra = dataCompra;
 	}
 
@@ -67,7 +73,14 @@ public class Pedido implements Serializable {
 	}
 
 	public double getTotalDaCompra() {
-		return totalDaCompra;
+		totalDaCompra = 0.0;
+		for (Produto p : produtos) {
+			totalDaCompra = totalDaCompra + p.getPreco() * p.getQuantidade();
+		}
+			
+		return Math.round(totalDaCompra * 100.0)/100.0; // Arredonda para 2 casas decimais
+									// de modo que para a exibição do atributo 'totalDaCompra' com
+									// GET 'pedidos' venha formatado em valor monetário
 	}
 
 	public void setTotalDaCompra(double totalDaCompra) {

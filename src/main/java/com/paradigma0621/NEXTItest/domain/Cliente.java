@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -27,13 +27,19 @@ public class Cliente implements Serializable {
 	private String nome;
 	private String cpf;
 	
-	//@JsonFormat(pattern="dd/MM/yyyy")
+	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date dataNascimento;
 
 	  @JsonIgnore //Para evitar referência cíclica. Esse lado da associação não será serializada
-	  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL) // note que nesta anotação 
-	  //definimos a propriedade mappedBy como “cliente” que é para informar que o atributo com
-	  //o nome cliente na entity Pedido que é dona do relacionamento.
+	  @OneToMany(mappedBy = "cliente") // note que nesta anotação 
+	  // definimos a propriedade mappedBy como “cliente” que é para informar que o atributo com
+	  // o nome cliente na entity Pedido que é dona do relacionamento.
+	  // NOTA: Não é possível a exclusão de um cliente que seja dono de algum pedido. Poderíamos
+	  // permitir tal funcionalidade alterando a linha acima para:
+	  // @OneToMany(mappedBy = "cliente", cascade=CascadeType.ALL)
+	  // o que acarretaria que apagando um cliente seriam apagados todos os seus pedidos 
+	  // conjuntamente.
+
 	private List<Pedido> pedidos = new ArrayList<>();
     
 	public Cliente() {

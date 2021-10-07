@@ -1,6 +1,7 @@
 package com.paradigma0621.NEXTItest.resources; //Pacote de controladores REST
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.paradigma0621.NEXTItest.domain.Cliente;
 import com.paradigma0621.NEXTItest.domain.Pedido;
 import com.paradigma0621.NEXTItest.domain.Produto;
+import com.paradigma0621.NEXTItest.services.ClienteService;
 import com.paradigma0621.NEXTItest.services.PedidoService;
 import com.paradigma0621.NEXTItest.services.ProdutoService;
 
@@ -26,6 +29,10 @@ public class PedidoResource {
 
 	@Autowired // Para instanciar automaticamente o objeto
 	private ProdutoService prodService; // O controlador REST vai acessar o serviço
+
+
+	@Autowired // Para instanciar automaticamente o objeto
+	private ClienteService clienteService; // O controlador REST vai acessar o serviço
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET) // Para dizer que o endpoint
 																	// agora é: /Pedidos/{id}
@@ -42,12 +49,15 @@ public class PedidoResource {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Pedido obj) {
 		// para que o objeto Pedido seja construido a partir dos dados json que enviar,
-		// temos que
-		// inserir a notação '@RequestBody' - faz o json ser convertido para o objeto
-		// Java
-		// automaticamente.
-		obj = service.insert(obj);
+		// temos que inserir a notação '@RequestBody' - faz o json ser convertido para o objeto
+		// Java automaticamente.
 
+		Date now = new Date(); // Lê a data/hora atual. Optou-se por deteterminar a data/hora da
+								// compra como o instânte da criação do pedido
+		obj.setDataCompra(now); //grava data/hora atual no atriburo 'dataCompra' do pedido
+		
+		obj = service.insert(obj);
+		
 		// Quando inserir com sucesso: é retornado o código HTTP 201, juntamente com a
 		// URI do novo objeto inserido
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -90,9 +100,9 @@ public class PedidoResource {
 	}
 
 	@RequestMapping(value = "/{id}/adicionaProduto/{pid}", method = RequestMethod.GET)
-	public ResponseEntity<Pedido> find(@PathVariable("id") Integer id, @PathVariable("pid") Integer pid) {
-		// Para o Spring saber que esse id informado é o 'id', e que o pid é o 'pid',
-		// colocamos o @PathVariable na linha de cima. 
+	public ResponseEntity<Pedido> addProdutoPedido(@PathVariable("id") Integer id, @PathVariable("pid") Integer pid) {
+		// Para o Spring saber que esse 'id' informado é o id do pedido, e que o 'pid' é o id do
+		// produto colocamos o @PathVariable na linha de cima. 
 		// Esse 'ReponseEntity' é um tipo especial do Spring que encapsula e armazena
 		// várias informações de uma resposta http para um serviço REST.
 
@@ -106,4 +116,58 @@ public class PedidoResource {
 		// e a resposta terá como corpo o objeto 'obj'
 	}
 
+	@RequestMapping(value = "/{id}/adicionaCliente/{cid}", method = RequestMethod.GET)
+	public ResponseEntity<Pedido> addClientePedido(@PathVariable("id") Integer id, @PathVariable("cid") Integer cid) {
+		// Para o Spring saber que esse 'id' informado é o id do pedido, e que o 'cid' é o id do
+		// cliente colocamos o @PathVariable na linha de cima. 
+		// Esse 'ReponseEntity' é um tipo especial do Spring que encapsula e armazena
+		// várias informações de uma resposta http para um serviço REST.
+
+		Pedido obj = service.find(id);
+		Cliente clienteObj = clienteService.find(cid);
+		obj.setCliente(clienteObj); // Especifica no pedido quem é seu cliente
+		clienteObj.getPedidos().add(obj); // O atributo 'pedido' do Cliente clienteObj passará a ser o
+								   //Pedido 'obj'
+		obj = service.update(obj);
+		return ResponseEntity.ok().body(obj); // ok() para dizer que a operação ocorreu com sucesso,
+		// e a resposta terá como corpo o objeto 'obj'
+	}
+
+
+	@RequestMapping(value = "/{id}/removeProduto/{pid}", method = RequestMethod.GET)
+	public ResponseEntity<Pedido> removeProdutoPedido(@PathVariable("id") Integer id, @PathVariable("pid") Integer pid) {
+		// Para o Spring saber que esse 'id' informado é o id do pedido, e que o 'pid' é o id do
+		// produto colocamos o @PathVariable na linha de cima. 
+		// Esse 'ReponseEntity' é um tipo especial do Spring que encapsula e armazena
+		// várias informações de uma resposta http para um serviço REST.
+	
+		Pedido obj = service.find(id);
+		Produto produtoObj = prodService.find(pid);
+		obj.getProdutos().remove(produtoObj); // Adiciona o produto na lista de produtos de Pedido
+		produtoObj.setPedido(null); // O atributo 'pedido' do Produto produtoObj passará a ser o
+								   //Pedido 'obj'
+		obj = service.update(obj);
+		return ResponseEntity.ok().body(obj); // ok() para dizer que a operação ocorreu com sucesso,
+										      // e a resposta terá como corpo o objeto 'obj'
+	}
+
+
+	@RequestMapping(value = "/removeCliente/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Pedido> removeClientePedido(@PathVariable Integer id) {
+			// Para o Spring saber que esse id informado nessa linha é o "id" (id do Cliente) da linha
+			// de cima colocamos o @PathVariable. Esse 'ReponseEntity' é um tipo especial do Spring 
+			// que encapsula e armazena várias informações de uma resposta http para um serviço REST.
+		
+		Pedido obj = service.find(id);
+		Cliente clienteObj = clienteService.find(obj.getCliente().getId());
+		obj.setCliente(null); // Especifica no pedido quem é seu cliente
+		clienteObj.getPedidos().remove(obj); // O atributo 'pedido' do Cliente clienteObj passará a ser o
+								   //Pedido 'obj'
+		obj = service.update(obj);
+		return ResponseEntity.ok().body(obj); // ok() para dizer que a operação ocorreu com sucesso,
+ 											  // e a resposta terá como corpo o objeto 'obj'
+	}
+	
+
 }
+
